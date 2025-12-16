@@ -6,13 +6,15 @@ import (
 )
 
 type Handler struct {
-	HandlerAuth AuthHandler
-	HandlerMenu MenuHandler
+	HandlerAuth       AuthHandler
+	HandlerMenu       MenuHandler
+	AssignmentHandler AssignmentHandler
 }
 
 func NewHandler(service service.Service, templates *template.Template) Handler {
 	return Handler{
-		HandlerAuth: NewAuthHandler(service.AuthService, templates),
-		HandlerMenu: NewMenuHandler(templates),
+		HandlerAuth:       NewAuthHandler(service.AuthService, templates),
+		HandlerMenu:       NewMenuHandler(templates),
+		AssignmentHandler: NewAssignmentHandler(templates, service.AssignmentService),
 	}
 }
