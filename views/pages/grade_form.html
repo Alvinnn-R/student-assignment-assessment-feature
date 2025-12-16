@@ -1,0 +1,17 @@
+{{ define "grade_form" }}
+  {{ template "base" . }}
+
+  <main class="container">
+    <h2>Nilai Tugas Mahasiswa</h2>
+    <p>Nama Mahasiswa: Andi Saputra</p>
+    <p>Status Pengumpulan: Terlambat</p>
+    <form action="#" method="POST">
+      <label for="grade">Nilai (0–100):</label>
+      <input type="number" id="grade" name="grade" min="0" max="100" required />
+      <button type="submit">Submit Nilai</button>
+    </form>
+  </main>
+
+  {{ template "footer" . }}
+  {{ template "lastfooter" . }}
+{{ end }}

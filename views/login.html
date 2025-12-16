@@ -1,0 +1,31 @@
+{{define "login"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - Manajemen Tugas</title>
+  <link rel="stylesheet" href="/public/assets/styles.css" />
+</head>
+<body class="login-body">
+
+  <div class="login-container">
+    <h2>Login User</h2>
+    {{if .Error}}
+    <h3 style="color: red;">{{.Error}}</h3>
+    {{end}}
+    <form action="/login" method="POST" class="login-form">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" required />
+
+      <button type="submit">Masuk</button>
+    </form>
+
+    <p class="login-footer">Belum punya akun? <a href="#">Daftar di sini</a></p>
+  </div>
+
+</body>
+</html>
+{{end}}

@@ -1,0 +1,34 @@
+{{ define "assignment" }}
+  {{ template "base" . }}
+
+  <main class="container">
+    <h2>Daftar Tugas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Judul</th>
+          <th>Deadline</th>
+          <th>Mata Kuliah</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tugas Algoritma 1</td>
+          <td>2025-06-20</td>
+          <td>Algoritma</td>
+          <td><a href="submission_form.html"><button>Kumpulkan</button></a></td>
+        </tr>
+        <tr>
+          <td>UAS Basis Data</td>
+          <td>2025-06-25</td>
+          <td>Basis Data</td>
+          <td><a href="submission_form.html"><button>Kumpulkan</button></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  {{ template "footer" . }}
+  {{ template "lastfooter" . }}
+{{ end }}

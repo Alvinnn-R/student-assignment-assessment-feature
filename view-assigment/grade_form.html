@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Penilaian Tugas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <h1>Manajemen Tugas</h1>
+      <ul class="nav-menu">
+        <li><a href="assigment.html">Tugas</a></li>
+        <li><a href="submission_form.html">Kumpulkan</a></li>
+        <li><a href="grade_form.html">Penilaian</a></li>
+        <li><a href="#">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h2>Nilai Tugas Mahasiswa</h2>
+    <p>Nama Mahasiswa: Andi Saputra</p>
+    <p>Status Pengumpulan: Terlambat</p>
+    <form action="#" method="POST">
+      <label for="grade">Nilai (0–100):</label>
+      <input type="number" id="grade" name="grade" min="0" max="100" required />
+      <button type="submit">Submit Nilai</button>
+    </form>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Sistem Tugas Kampus</p>
+    </div>
+  </footer>
+</body>
+</html>
