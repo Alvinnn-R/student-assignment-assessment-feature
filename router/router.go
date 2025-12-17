@@ -24,6 +24,12 @@ func NewRouter(handler handler.Handler) *chi.Mux {
 		r.Get("/submit-form", handler.AssignmentHandler.SubmitView)
 		r.Get("/success-submit", handler.AssignmentHandler.SuccessSubmit)
 		r.Post("/submit-assignment", handler.AssignmentHandler.SubmitAssignment)
+
+		// Grading routes
+		r.Get("/submissions", handler.SubmissionHandler.ListSubmissions)
+		r.Get("/grade-form", handler.SubmissionHandler.GradeFormView)
+		r.Post("/submit-grade", handler.SubmissionHandler.SubmitGrade)
+
 		r.Get("/grade", handler.HandlerMenu.GradeView)
 		r.Get("/logout", handler.HandlerAuth.LogoutView)
 	})

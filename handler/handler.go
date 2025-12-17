@@ -9,6 +9,7 @@ type Handler struct {
 	HandlerAuth       AuthHandler
 	HandlerMenu       MenuHandler
 	AssignmentHandler AssignmentHandler
+	SubmissionHandler SubmissionHandler
 }
 
 func NewHandler(service service.Service, templates *template.Template) Handler {
@@ -16,5 +17,6 @@ func NewHandler(service service.Service, templates *template.Template) Handler {
 		HandlerAuth:       NewAuthHandler(service.AuthService, templates),
 		HandlerMenu:       NewMenuHandler(templates),
 		AssignmentHandler: NewAssignmentHandler(templates, service.AssignmentService),
+		SubmissionHandler: NewSubmissionHandler(templates, service.SubmissionService),
 	}
 }

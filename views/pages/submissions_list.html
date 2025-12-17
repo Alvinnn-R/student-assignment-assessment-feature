@@ -1,0 +1,71 @@
+{{ define "submissions_list" }}
+{{ template "base" . }}
+
+<main class="container">
+  <h2>Daftar Pengumpulan Tugas Mahasiswa</h2>
+
+  {{ if .ShowSuccess }}
+  <p style="color: green; background-color: #d4edda; padding: 10px; border-radius: 5px;">✓ Nilai berhasil disimpan!</p>
+  {{ end }}
+
+  {{ if .Submissions }}
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Nama Mahasiswa</th>
+        <th>Judul Tugas</th>
+        <th>Status</th>
+        <th>File</th>
+        <th>Nilai</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range $index, $submission := .Submissions}}
+      <tr>
+        <td>{{ add $index 1 }}</td>
+        <td>{{$submission.StudentName}}</td>
+        <td>{{$submission.AssignmentTitle}}</td>
+        <td>
+          {{ if eq $submission.Status "submitted" }}
+          <span style="color: green;">Tepat Waktu</span>
+          {{ else }}
+          <span style="color: red;">Terlambat</span>
+          {{ end }}
+        </td>
+        <td>
+          {{ if $submission.FileURL }}
+          <a href="{{$submission.FileURL}}" target="_blank">Download</a>
+          {{ else }}
+          -
+          {{ end }}
+        </td>
+        <td>
+          {{ if $submission.Grade }}
+          <strong>{{ printf "%.2f" (derefFloat $submission.Grade) }}</strong>
+          {{ else }}
+          <span style="color: #999;">Belum dinilai</span>
+          {{ end }}
+        </td>
+        <td>
+          <form action="/user/grade-form" method="GET" style="margin: 0;">
+            <input type="hidden" name="student_id" value="{{$submission.StudentID}}">
+            <input type="hidden" name="assignment_id" value="{{$submission.AssignmentID}}">
+            <button type="submit">
+              {{ if $submission.Grade }}Edit Nilai{{ else }}Beri Nilai{{ end }}
+            </button>
+          </form>
+        </td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{ else }}
+  <p style="text-align: center; color: #999;">Belum ada pengumpulan tugas.</p>
+  {{ end }}
+</main>
+
+{{ template "footer" . }}
+{{ template "lastfooter" . }}
+{{ end }}

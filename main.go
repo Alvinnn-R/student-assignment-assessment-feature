@@ -13,7 +13,23 @@ import (
 )
 
 func main() {
-	var templates = template.Must(template.New("").ParseGlob("views/**/*.html"))
+	// Template dengan fungsi helper
+	funcMap := template.FuncMap{
+		"add": func(a, b int) int {
+			return a + b
+		},
+		"mod": func(a, b int) int {
+			return a % b
+		},
+		"derefFloat": func(f *float64) float64 {
+			if f == nil {
+				return 0
+			}
+			return *f
+		},
+	}
+
+	var templates = template.Must(template.New("").Funcs(funcMap).ParseGlob("views/**/*.html"))
 
 	db, err := database.InitDB()
 	if err != nil {
@@ -32,6 +48,6 @@ func main() {
 
 	fmt.Println("server running on port 8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
-		log.Fatal("error server")
+		log.Fatal("error server: ", err)
 	}
 }

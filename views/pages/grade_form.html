@@ -1,17 +1,34 @@
 {{ define "grade_form" }}
-  {{ template "base" . }}
+{{ template "base" . }}
 
-  <main class="container">
-    <h2>Nilai Tugas Mahasiswa</h2>
-    <p>Nama Mahasiswa: Andi Saputra</p>
-    <p>Status Pengumpulan: Terlambat</p>
-    <form action="#" method="POST">
-      <label for="grade">Nilai (0–100):</label>
-      <input type="number" id="grade" name="grade" min="0" max="100" required />
-      <button type="submit">Submit Nilai</button>
-    </form>
-  </main>
+<main class="container">
+  <h2>Nilai Tugas Mahasiswa</h2>
+  <p>Nama Mahasiswa: {{ .StudentName }}</p>
+  <p>Judul Tugas: {{ .AssignmentTitle }}</p>
+  <p>Status Pengumpulan:
+    {{ if eq .Status "submitted" }}
+    <span style="color: green;">Tepat Waktu</span>
+    {{ else }}
+    <span style="color: red;">Terlambat</span>
+    {{ end }}
+  </p>
+  {{ if .FileURL }}
+  <p>File: <a href="{{ .FileURL }}" target="_blank">Download File</a></p>
+  {{ end }}
+  {{ if .Grade }}
+  <p>Nilai Saat Ini: {{ printf "%.2f" (derefFloat .Grade) }}</p>
+  {{ end }}
 
-  {{ template "footer" . }}
-  {{ template "lastfooter" . }}
+  <form action="/user/submit-grade" method="POST">
+    <input type="hidden" name="student_id" value="{{ .StudentID }}" />
+    <input type="hidden" name="assignment_id" value="{{ .AssignmentID }}" />
+    <label for="grade">Nilai (0–100):</label>
+    <input type="number" id="grade" name="grade" min="0" max="100" step="0.01" {{ if .Grade }}value="{{ printf " %.2f"
+      (derefFloat .Grade) }}"{{ end }} required />
+    <button type="submit">{{ if .Grade }}Update Nilai{{ else }}Submit Nilai{{ end }}</button>
+  </form>
+</main>
+
+{{ template "footer" . }}
+{{ template "lastfooter" . }}
 {{ end }}

@@ -14,7 +14,7 @@ type PgxIface interface {
 }
 
 func InitDB() (*pgx.Conn, error) {
-	connStr := "user=postgres password=postgres dbname=assignment sslmode=disable host=172.31.32.1"
+	connStr := "user=postgres password=root dbname=assigment sslmode=disable host=localhost"
 	conn, err := pgx.Connect(context.Background(), connStr)
 	return conn, err
 }

@@ -22,8 +22,23 @@ func NewAssignmentHandler(templates *template.Template, assignmenetService servi
 }
 
 func (AssignmentHandler *AssignmentHandler) List(w http.ResponseWriter, r *http.Request) {
-	assignments, err := AssignmentHandler.AssignmentService.GetAllAssignments()
+	// Get student ID from cookie
+	c, err := r.Cookie("session")
 	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	idStr := strings.TrimPrefix(c.Value, "lumos-")
+	studentID, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid student ID", http.StatusBadRequest)
+		return
+	}
+
+	assignments, err := AssignmentHandler.AssignmentService.GetAssignmentsWithGrades(studentID)
+	if err != nil {
+		http.Error(w, "Failed to get assignments", http.StatusInternalServerError)
 		return
 	}
 

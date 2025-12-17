@@ -1,35 +1,64 @@
 {{ define "assignment" }}
-  {{ template "base" . }}
+{{ template "base" . }}
 
-  <main class="container">
-    <h2>Daftar Tugas</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Judul</th>
-          <th>Deskripsi</th>
-          <th>Deadline</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{range .}}
-        <tr>
-          <td>{{.Title}}</td>
-          <td>{{.Description}}</td>
-          <td>{{.Deadline}}</td>
-          <td>
-            <form action="/user/submit-form" method="GET" style="margin: 0;">
-              <input type="hidden" name="assignment_id" value="{{.ID}}">
-              <button type="submit">Kumpulkan</button>
-            </form>
-          </td>
-        </tr>
-        {{end}}
-      </tbody>
-    </table>
-  </main>
+<main class="container">
+  <h2>Daftar Tugas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Judul</th>
+        <th>Deskripsi</th>
+        <th>Deadline</th>
+        <th>Status</th>
+        <th>Nilai</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .}}
+      <tr>
+        <td>{{.Title}}</td>
+        <td>{{.Description}}</td>
+        <td>{{.Deadline}}</td>
+        <td>
+          {{ if .Status }}
+          {{ if eq .Status "submitted" }}
+          <span style="color: green;">Sudah Dikumpulkan</span>
+          {{ else if eq .Status "late" }}
+          <span style="color: red;">Terlambat</span>
+          {{ end }}
+          {{ else }}
+          <span style="color: orange;">Belum Dikumpulkan</span>
+          {{ end }}
+        </td>
+        <td>
+          {{ if .Grade }}
+          <strong>{{ printf "%.2f" (derefFloat .Grade) }}</strong>
+          {{ else }}
+          <span style="color: #999;">-</span>
+          {{ end }}
+        </td>
+        <td>
+          {{ if not .Status }}
+          <form action="/user/submit-form" method="GET" style="margin: 0;">
+            <input type="hidden" name="assignment_id" value="{{.ID}}">
+            <button type="submit">Kumpulkan</button>
+          </form>
+          {{ else }}
+          <form action="#" method="GET" style="margin: 0;">
+            <input type="hidden" name="assignment_id" value="{{.ID}}">
+            <button type="button" disabled style="cursor: not-allowed; opacity: 0.6;">
+              Sudah Dikumpulkan
+            </button>
+          </form>
+          {{ end }}
+        </td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+</main>
 
-  {{ template "footer" . }}
-  {{ template "lastfooter" . }}
+{{ template "footer" . }}
+{{ template "lastfooter" . }}
 {{ end }}

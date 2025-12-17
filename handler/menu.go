@@ -37,10 +37,8 @@ func (h *MenuHandler) SubmitView(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MenuHandler) GradeView(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	if err := h.Templates.ExecuteTemplate(w, "grade_form", nil); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	// Redirect ke submissions list
+	http.Redirect(w, r, "/user/submissions", http.StatusSeeOther)
 }
 
 func (h *MenuHandler) PageUnauthorized(w http.ResponseWriter, r *http.Request) {

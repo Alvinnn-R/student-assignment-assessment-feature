@@ -12,6 +12,7 @@ import (
 
 type AssignmentService interface {
 	GetAllAssignments() ([]model.Assignment, error)
+	GetAssignmentsWithGrades(studentID int) ([]model.Assignment, error)
 	SubmitAssignment(studentID, assignmentID int, file multipart.File, fileHeader *multipart.FileHeader) (string, error)
 	GetGradeFormData() ([]model.User, []model.Assignment, error)
 	GetAssignmentByID(id int) (*model.Assignment, error)
@@ -48,12 +49,12 @@ func (s *assignmentService) SubmitAssignment(studentID, assignmentID int, file m
 	}
 
 	// save file to disk
-	uploadDir := "uploads"
+	uploadDir := "public/uploads"
 	os.MkdirAll(uploadDir, os.ModePerm)
 
 	filename := fmt.Sprintf("%d_%d_%s", assignmentID, studentID, fileHeader.Filename)
 	filepath := fmt.Sprintf("%s/%s", uploadDir, filename)
-	accessURL := fmt.Sprintf("http://localhost:8080/%s/%s", uploadDir, filename)
+	accessURL := fmt.Sprintf("/public/uploads/%s", filename)
 
 	dst, err := os.Create(filepath)
 	if err != nil {
@@ -81,7 +82,24 @@ func (s *assignmentService) SubmitAssignment(studentID, assignmentID int, file m
 
 	return status, s.Repo.SubmissionRepo.Create(sub)
 }
+func (s *assignmentService) GetAssignmentsWithGrades(studentID int) ([]model.Assignment, error) {
+	// Get all assignments
+	assignments, err := s.Repo.AssignmentRepo.FindAll()
+	if err != nil {
+		return nil, err
+	}
 
+	// For each assignment, check if student has submission and grade
+	for i := range assignments {
+		submission, err := s.Repo.SubmissionRepo.FindByStudentAndAssignment(studentID, assignments[i].ID)
+		if err == nil && submission != nil {
+			assignments[i].Grade = submission.Grade
+			assignments[i].Status = submission.Status
+		}
+	}
+
+	return assignments, nil
+}
 func (s *assignmentService) GetGradeFormData() ([]model.User, []model.Assignment, error) {
 	students, err := s.Repo.UserRepo.FindAllStudents()
 	if err != nil {
